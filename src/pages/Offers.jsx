@@ -8,21 +8,17 @@ import {
     getDocs
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { db } from '../firebase.config';
 
 import Spinner from '../components/Spinner';
 import ListingItem from '../components/ListingItem';
 
-function Category() {
+function Offers() {
     const [listings, setListings] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const params = useParams();
-
     useEffect(() => {
-        console.log(params.categoryName);
         const fetchListings = async () => {
             try {
                 //Get Reference
@@ -31,7 +27,7 @@ function Category() {
                 //create query
                 const q = query(
                     listingsRef,
-                    where('type', '==', params.categoryName),
+                    where('offer', '==', true),
                     orderBy('timestamp', 'desc'),
                     limit(10)
                 );
@@ -57,12 +53,12 @@ function Category() {
             }
         };
         fetchListings();
-    }, [params.categoryName])
+    }, [])
     return (
         <div className="category">
             <header>
                 <p className="pageHeader">
-                    {params.categoryName === 'rent' ? 'Places for rent' : 'Places for sale'}
+                    Offers
                 </p>
             </header>
             {loading ? (<Spinner />) : listings && listings.length > 0 ?
@@ -76,9 +72,9 @@ function Category() {
                             </ul>
                         </main>
                     </>
-                ) : (<p>No listings for {params.categoryName}</p>)}
+                ) : (<p>No listings for offers</p>)}
         </div>
     );
 }
 
-export default Category;
+export default Offers;
